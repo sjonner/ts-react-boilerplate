@@ -1,7 +1,5 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import { App } from "./App";
 
-ReactDOM.render(
-  <h1>test4</h1>,
-  document.getElementById("example")
-);
+ReactDOM.render(<App />, document.getElementById("example"));
