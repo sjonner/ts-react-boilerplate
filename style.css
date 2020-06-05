@@ -1,0 +1,16 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.Label,
+.Label-text {
+  display: block;
+}
+.Label {
+  margin-bottom: 10px;
+}
+.Label-error {
+  color: red;
+}
