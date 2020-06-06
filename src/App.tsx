@@ -1,15 +1,15 @@
 import * as React from "react";
-import { useReducer, useCallback } from "react";
-import { AppState, appReducer, initialState } from "./appReducer";
+import { useCallback } from "react";
 import {
   setEmail,
   setPassword,
   setPasswordConfirm,
   validateForm,
 } from "./appActions";
+import { useAppState } from "./useAppState";
 
 export const App: React.FC = () => {
-  const [state, dispatch] = useReducer(appReducer, initialState as AppState);
+  const { state, dispatch } = useAppState();
   const { email, password, passwordConfirm, errors } = state;
 
   const handleSubmit = useCallback(
