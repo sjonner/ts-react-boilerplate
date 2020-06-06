@@ -1,40 +1,27 @@
 import * as React from "react";
-import { useState } from "react";
-
-type AppState = {};
+import { useReducer, useCallback } from "react";
+import { AppState, appReducer, initialState } from "./appReducer";
+import {
+  setEmail,
+  setPassword,
+  setPasswordConfirm,
+  validateForm,
+} from "./appActions";
 
 export const App: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [errors, setErrors] = useState({
-    email: "",
-    password: "",
-    passwordConfirm: "",
-  });
+  const [state, dispatch] = useReducer(appReducer, initialState as AppState);
+  const { email, password, passwordConfirm, errors } = state;
+
+  const handleSubmit = useCallback(
+    (event: React.FormEvent) => {
+      event.preventDefault();
+      dispatch(validateForm());
+    },
+    [dispatch]
+  );
 
   return (
-    <form
-      noValidate
-      onSubmit={(event: React.FormEvent) => {
-        let emailError = "";
-        let passwordError = "";
-        let confirmError = "";
-
-        if (!email.includes("@")) emailError = "Invalid password";
-        else if (password.length < 7) passwordError = "Password is too short";
-        else if (password !== passwordConfirm)
-          confirmError = "Passwords should match";
-
-        setErrors({
-          email: emailError,
-          password: passwordError,
-          passwordConfirm: confirmError,
-        });
-
-        if (emailError || passwordError || confirmError) event.preventDefault();
-      }}
-    >
+    <form noValidate onSubmit={handleSubmit}>
       <label className="Label">
         <span className="Label-text">Email:</span>
         <input
@@ -43,7 +30,7 @@ export const App: React.FC = () => {
           placeholder="Email address"
           value={email}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            setEmail(event.currentTarget.value)
+            dispatch(setEmail(event.currentTarget.value))
           }
         />
         {errors.email && <span className="Label-error">{errors.email}</span>}
@@ -57,7 +44,7 @@ export const App: React.FC = () => {
           placeholder="Choose password"
           value={password}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            setPassword(event.currentTarget.value)
+            dispatch(setPassword(event.currentTarget.value))
           }
         />
         {errors.password && (
@@ -73,7 +60,7 @@ export const App: React.FC = () => {
           placeholder="Confirm password"
           value={passwordConfirm}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            setPasswordConfirm(event.currentTarget.value)
+            dispatch(setPasswordConfirm(event.currentTarget.value))
           }
         />
         {errors.passwordConfirm && (
