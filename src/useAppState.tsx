@@ -23,6 +23,5 @@ export function useAppState() {
   }
 
   // Return api here. Parts of the state that you want to expose or function to change state.
-  // return [state, dispatch];
   return context;
 }
