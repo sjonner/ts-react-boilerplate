@@ -1,6 +1,7 @@
 import { Action, ActionType } from "./appActions";
 
 export const initialState = {
+  step: 1,
   email: "",
   password: "",
   passwordConfirm: "",
@@ -24,30 +25,36 @@ export function appReducer(state: AppState, action: Action): AppState {
       return { ...state, passwordConfirm: action.value };
     case ActionType.SET_TERMS_ACCEPTED:
       return { ...state, termsAccepted: action.value };
+    case ActionType.SET_STEP:
+      return { ...state, step: action.value };
     case ActionType.VALIDATE_FORM:
-      return validateForm(state);
+      return validateForm(state, action.value);
     default:
       // How to fix reading type on action when type is never?
       throw new Error(`Invalid action type passed: ${action!.type}`);
   }
 }
 
-function validateForm(state: AppState): AppState {
-  let emailError = "";
-  let passwordError = "";
-  let confirmError = "";
+// TODO: Move validation logic to separate service?
+function validateForm(state: AppState, step: number): AppState {
+  const errors = {
+    email: "",
+    password: "",
+    passwordConfirm: "",
+  };
 
-  if (!state.email.includes("@")) emailError = "Invalid password";
-  else if (state.password.length < 7) passwordError = "Password is too short";
-  else if (state.password !== state.passwordConfirm)
-    confirmError = "Passwords should match";
+  if (step === 1) {
+    if (!state.email.includes("@")) errors.email = "Invalid password";
+    else if (state.password.length < 7)
+      errors.password = "Password is too short";
+    else if (state.password !== state.passwordConfirm)
+      errors.passwordConfirm = "Passwords should match";
+  }
+  const hasErrors = Object.values(errors).some(Boolean);
 
   return {
     ...state,
-    errors: {
-      email: emailError,
-      password: passwordError,
-      passwordConfirm: confirmError,
-    },
+    step: step + (hasErrors ? 0 : 1),
+    errors,
   };
 }

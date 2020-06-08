@@ -3,7 +3,10 @@ import { useAppState } from "./useAppState";
 import { setTermsAccepted } from "./appActions";
 
 export const Terms: React.FC = () => {
-  const { dispatch } = useAppState();
+  const {
+    state: { termsAccepted },
+    dispatch,
+  } = useAppState();
 
   const handleChange = React.useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) =>
@@ -13,7 +16,7 @@ export const Terms: React.FC = () => {
 
   return (
     <label className="Label">
-      <input type="checkbox" onChange={handleChange} />
+      <input type="checkbox" onChange={handleChange} checked={termsAccepted} />
       Accept terms and conditions
     </label>
   );

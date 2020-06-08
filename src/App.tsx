@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useCallback } from "react";
-import { validateForm, setTermsAccepted } from "./appActions";
+import { validateForm, setStep } from "./appActions";
 import { useAppState } from "./useAppState";
 import { Email } from "./Email";
 import { Password } from "./Password";
@@ -9,28 +9,43 @@ import { Terms } from "./Terms";
 
 export const App: React.FC = () => {
   const {
-    state: { termsAccepted },
+    state: { termsAccepted, step },
     dispatch,
   } = useAppState();
 
   const handleSubmit = useCallback(
     (event: React.FormEvent) => {
       event.preventDefault();
-      dispatch(validateForm());
+      dispatch(validateForm(step));
     },
-    [dispatch]
+    [dispatch, step]
   );
 
   return (
     <form noValidate onSubmit={handleSubmit}>
-      <Email />
-      <Password />
-      <PasswordConfirm />
-      <Terms />
+      {step === 1 && (
+        <>
+          <Email />
+          <Password />
+          <PasswordConfirm />
+          <Terms />
+          <button type="submit" disabled={!termsAccepted}>
+            Next
+          </button>
+        </>
+      )}
 
-      <button type="submit" disabled={!termsAccepted}>
-        Submit
-      </button>
+      {step === 2 && (
+        <>
+          <div>Address</div>
+          <button type="button" onClick={() => dispatch(setStep(step - 1))}>
+            Previous
+          </button>
+          <button type="submit">Submit</button>
+        </>
+      )}
+
+      {step > 2 && <div className="Message Message--succes">Thanks!</div>}
     </form>
   );
 };

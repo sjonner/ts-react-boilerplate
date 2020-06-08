@@ -14,3 +14,7 @@
 .Label-error {
   color: red;
 }
+
+
+.Message { font-weight: bold; }
+.Message--success {color:green;}
