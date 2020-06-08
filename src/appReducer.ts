@@ -4,6 +4,7 @@ export const initialState = {
   email: "",
   password: "",
   passwordConfirm: "",
+  termsAccepted: false,
   errors: {
     email: "",
     password: "",
@@ -21,6 +22,8 @@ export function appReducer(state: AppState, action: Action): AppState {
       return { ...state, password: action.value };
     case ActionType.SET_PASSWORDCONFIRM:
       return { ...state, passwordConfirm: action.value };
+    case ActionType.SET_TERMS_ACCEPTED:
+      return { ...state, termsAccepted: action.value };
     case ActionType.VALIDATE_FORM:
       return validateForm(state);
     default:

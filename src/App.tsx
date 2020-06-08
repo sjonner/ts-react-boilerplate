@@ -1,13 +1,17 @@
 import * as React from "react";
 import { useCallback } from "react";
-import { validateForm } from "./appActions";
+import { validateForm, setTermsAccepted } from "./appActions";
 import { useAppState } from "./useAppState";
 import { Email } from "./Email";
 import { Password } from "./Password";
 import { PasswordConfirm } from "./PasswordConfirm";
+import { Terms } from "./Terms";
 
 export const App: React.FC = () => {
-  const { dispatch } = useAppState();
+  const {
+    state: { termsAccepted },
+    dispatch,
+  } = useAppState();
 
   const handleSubmit = useCallback(
     (event: React.FormEvent) => {
@@ -22,8 +26,11 @@ export const App: React.FC = () => {
       <Email />
       <Password />
       <PasswordConfirm />
+      <Terms />
 
-      <button type="submit">Submit</button>
+      <button type="submit" disabled={!termsAccepted}>
+        Submit
+      </button>
     </form>
   );
 };

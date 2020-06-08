@@ -3,6 +3,7 @@ export type Action = ReturnType<
   | typeof setPassword
   | typeof setPasswordConfirm
   | typeof validateForm
+  | typeof setTermsAccepted
 >;
 
 export enum ActionType {
@@ -10,6 +11,7 @@ export enum ActionType {
   SET_PASSWORD = "SET_PASSWORD",
   SET_PASSWORDCONFIRM = "SET_PASSWORDCONFIRM",
   VALIDATE_FORM = "VALIDATE_FORM",
+  SET_TERMS_ACCEPTED = "SET_TERMS_ACCEPTED",
 }
 
 export function setEmail(email: string) {
@@ -36,5 +38,12 @@ export function setPasswordConfirm(password: string) {
 export function validateForm() {
   return <const>{
     type: ActionType.VALIDATE_FORM,
+  };
+}
+
+export function setTermsAccepted(value: boolean) {
+  return <const>{
+    type: ActionType.SET_TERMS_ACCEPTED,
+    value,
   };
 }
