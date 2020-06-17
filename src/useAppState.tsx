@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useReducer, createContext, useContext } from "react";
 import { AppState, initialState, appReducer } from "./appReducer";
-import { Action } from "./appActions";
+import { Action, setField, validateForm } from "./appActions";
 
 type ContextType = {
   state: AppState;
@@ -22,6 +22,13 @@ export function useAppState() {
     throw new Error("useAppState must be used within a AppProvider");
   }
 
-  // Return api here. Parts of the state that you want to expose or function to change state.
-  return context;
+  return {
+    state: context.state,
+    setField<T extends keyof AppState>(field: T, value: AppState[T]) {
+      context.dispatch(setField(field, value));
+    },
+    validateForm(step: number) {
+      context.dispatch(validateForm(step))
+    }
+  };
 }

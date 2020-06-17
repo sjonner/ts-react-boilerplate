@@ -5,13 +5,12 @@ import { setTermsAccepted } from "./appActions";
 export const Terms: React.FC = () => {
   const {
     state: { termsAccepted },
-    dispatch,
+    setField,
   } = useAppState();
 
   const handleChange = React.useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) =>
-      dispatch(setTermsAccepted(event.currentTarget.checked)),
-    [dispatch]
+    (event: React.ChangeEvent<HTMLInputElement>) => setField("termsAccepted", event.currentTarget.checked),
+    [setField]
   );
 
   return (

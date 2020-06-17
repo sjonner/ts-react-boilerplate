@@ -1,4 +1,7 @@
+import { AppState } from "./appReducer";
+
 export type Action = ReturnType<
+  | typeof setField
   | typeof setEmail
   | typeof setPassword
   | typeof setPasswordConfirm
@@ -14,6 +17,16 @@ export enum ActionType {
   VALIDATE_FORM = "VALIDATE_FORM",
   SET_TERMS_ACCEPTED = "SET_TERMS_ACCEPTED",
   SET_STEP = "SET_STEP",
+  SET_FIELD = "SET_FIELD"
+}
+
+
+export function setField<T extends keyof AppState>(field: T, value: AppState[T]) {
+  return <const>{
+    type: ActionType.SET_FIELD,
+    field,
+    value,
+  };
 }
 
 export function setEmail(email: string) {

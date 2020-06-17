@@ -4,7 +4,7 @@ import { setPasswordConfirm } from "./appActions";
 
 export const PasswordConfirm: React.FC = () => {
   const {
-    dispatch,
+    setField,
     state: {
       passwordConfirm,
       errors: { passwordConfirm: error },
@@ -12,9 +12,8 @@ export const PasswordConfirm: React.FC = () => {
   } = useAppState();
 
   const handleChange = React.useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) =>
-      dispatch(setPasswordConfirm(event.currentTarget.value)),
-    [dispatch]
+    (event: React.ChangeEvent<HTMLInputElement>) => setField("passwordConfirm", event.currentTarget.value),
+    [setField]
   );
 
   return (

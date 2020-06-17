@@ -1,10 +1,10 @@
 import * as React from "react";
 import { useAppState } from "./useAppState";
-import { setEmail } from "./appActions";
+import { Label } from "./Label";
 
 export const Email: React.FC = () => {
   const {
-    dispatch,
+    setField,
     state: {
       email,
       errors: { email: error },
@@ -12,22 +12,11 @@ export const Email: React.FC = () => {
   } = useAppState();
 
   const handleChange = React.useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) =>
-      dispatch(setEmail(event.currentTarget.value)),
-    [dispatch]
+    (event: React.ChangeEvent<HTMLInputElement>) => setField("email", event.currentTarget.value),
+    [setField]
   );
 
   return (
-    <label className="Label">
-      <span className="Label-text">Email:</span>
-      <input
-        className="Label-input"
-        type="email"
-        placeholder="Email address"
-        value={email}
-        onChange={handleChange}
-      />
-      {error && <span className="Label-error">{error}</span>}
-    </label>
+    <Label text="Email" type="email" placeholder="Email address" value={email} onChange={handleChange} error={error} />
   );
 };

@@ -1,24 +1,25 @@
 import * as React from "react";
 import { useCallback } from "react";
-import { validateForm, setStep } from "./appActions";
 import { useAppState } from "./useAppState";
 import { Email } from "./Email";
 import { Password } from "./Password";
 import { PasswordConfirm } from "./PasswordConfirm";
 import { Terms } from "./Terms";
+import { Label } from "./Label";
 
 export const App: React.FC = () => {
   const {
-    state: { termsAccepted, step },
-    dispatch,
+    state: { street, houseNumber, city, zipCode, termsAccepted, step, errors },
+    setField,
+    validateForm,
   } = useAppState();
 
   const handleSubmit = useCallback(
     (event: React.FormEvent) => {
       event.preventDefault();
-      dispatch(validateForm(step));
+      validateForm(step);
     },
-    [dispatch, step]
+    [step]
   );
 
   return (
@@ -37,8 +38,23 @@ export const App: React.FC = () => {
 
       {step === 2 && (
         <>
-          <div>Address</div>
-          <button type="button" onClick={() => dispatch(setStep(step - 1))}>
+          <Label
+            text="Street"
+            placeholder="Street"
+            value={street}
+            onChange={(e) => setField("street", e.currentTarget.value)}
+            error={errors["email"]}
+          />
+          {/* <Label
+            text="House number"
+            placeholder="House number"
+            value={houseNumber}
+            onChange={handleChange}
+            error={error}
+          />
+          <Label text="City" placeholder="City" value={city} onChange={handleChange} error={error} />
+          <Label text="Zipcode" placeholder="Zipcode" value={zipCode} onChange={handleChange} error={error} /> */}
+          <button type="button" onClick={() => setField("step", step - 1)}>
             Previous
           </button>
           <button type="submit">Submit</button>
