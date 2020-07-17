@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useReducer, createContext, useContext } from "react";
+import { useReducer, createContext, useContext, useMemo, memo } from "react";
 import { AppState, initialState, appReducer } from "./appReducer";
 import { Action, setField, validateForm } from "./appActions";
 
@@ -10,25 +10,32 @@ type ContextType = {
 
 const AppContext = createContext<ContextType>(null);
 
-export const AppProvider: React.FC = (props) => {
+export const AppProvider: React.FC = memo(({ children }) => {
   const [state, dispatch] = useReducer(appReducer, initialState);
+  const value = useMemo(() => ({ state, dispatch }), [state, dispatch]);
 
-  return <AppContext.Provider value={{ state, dispatch }} {...props} />;
-};
+  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
+});
 
 export function useAppState() {
   const context = useContext(AppContext);
+
   if (!context) {
     throw new Error("useAppState must be used within a AppProvider");
   }
 
-  return {
-    state: context.state,
-    setField<T extends keyof AppState>(field: T, value: AppState[T]) {
-      context.dispatch(setField(field, value));
-    },
-    validateForm(step: number) {
-      context.dispatch(validateForm(step))
-    }
-  };
+  const api = useMemo(
+    () => ({
+      state: context.state,
+      setField<T extends keyof AppState>(field: T, value: AppState[T]) {
+        context.dispatch(setField(field, value));
+      },
+      validateForm(step: number) {
+        context.dispatch(validateForm(step));
+      },
+    }),
+    [context.state]
+  );
+
+  return api;
 }

@@ -2,7 +2,7 @@ import * as React from "react";
 import { useAppState } from "./useAppState";
 import { Label } from "./Label";
 
-export const Email: React.FC = () => {
+export const Email: React.FC = React.memo(() => {
   const {
     setField,
     state: {
@@ -19,4 +19,6 @@ export const Email: React.FC = () => {
   return (
     <Label text="Email" type="email" placeholder="Email address" value={email} onChange={handleChange} error={error} />
   );
-};
+});
+
+Email.displayName = 'Email'

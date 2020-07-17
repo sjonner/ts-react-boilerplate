@@ -12,6 +12,7 @@ export const Password: React.FC = () => {
   } = useAppState();
   // I Know you prefer this on a global state object, but I'm wondering what the idea is.
   // Local state for simple things isn't bad perse right?
+  // Also, you get the benefit of only rerendering children that use the state.
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleChange = React.useCallback(
