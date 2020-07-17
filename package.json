@@ -4,6 +4,7 @@
     "build": "webpack"
   },
   "dependencies": {
+    "@welldone-software/why-did-you-render": "^4.2.6",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-hot-loader": "^4.12.21",

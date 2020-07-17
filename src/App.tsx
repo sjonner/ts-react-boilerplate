@@ -1,4 +1,6 @@
 import * as React from "react";
+import { hot } from "react-hot-loader/root";
+import React from "react";
 import { useCallback } from "react";
 import { useAppState } from "./useAppState";
 import { Email } from "./Email";
@@ -65,3 +67,5 @@ export const App: React.FC = () => {
     </form>
   );
 };
+
+export const HotApp = hot(App);
