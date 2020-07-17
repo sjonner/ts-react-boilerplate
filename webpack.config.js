@@ -5,7 +5,8 @@ module.exports = {
   devtool: "source-map",
   devServer: {
     contentBase: '.',
-    writeToDisk: true
+    writeToDisk: true,
+    hot: true
   },
   resolve: {
     // Add '.ts' and '.tsx' as resolvable extensions.
@@ -19,7 +20,7 @@ module.exports = {
         exclude: /node_modules/,
         use: [
           {
-            loader: "ts-loader"
+            loader: "awesome-typescript-loader"
           }
         ]
       },
