@@ -1,15 +1,15 @@
 import "./wdyr";
 import "react-hot-loader";
-import * as React from "react";
-import * as ReactDOM from "react-dom";
-import { AppProvider } from "./useAppState";
+import React from "react";
+import ReactDOM from "react-dom";
+import { AppStateProvider } from "./useAppState";
 import { HotApp } from "./App";
 
 ReactDOM.render(
   <React.StrictMode>
-    <AppProvider>
+    <AppStateProvider>
       <HotApp />
-    </AppProvider>
+    </AppStateProvider>
   </React.StrictMode>,
   document.getElementById("⚛")
 );

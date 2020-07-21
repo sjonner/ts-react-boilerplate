@@ -1,18 +1,18 @@
-import * as React from "react";
-import { useAppState } from "./useAppState";
+import React from "react";
+import { useAppState, useAppDispatch } from "./useAppState";
 import { setPassword } from "./appActions";
 
 export const Password: React.FC = () => {
   const {
-    setField,
-    state: {
-      password,
-      errors: { password: error },
-    },
+    password,
+    errors: { password: error },
   } = useAppState();
+  const { setField } = useAppDispatch();
+
   // I Know you prefer this on a global state object, but I'm wondering what the idea is.
   // Local state for simple things isn't bad perse right?
   // Also, you get the benefit of only rerendering children that use the state.
+  // If you need the state in another components, hoist it up to shared component.
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleChange = React.useCallback(

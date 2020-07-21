@@ -1,12 +1,9 @@
-import * as React from "react";
-import { useAppState } from "./useAppState";
-import { setTermsAccepted } from "./appActions";
+import React from "react";
+import { useAppState, useAppDispatch } from "./useAppState";
 
 export const Terms: React.FC = () => {
-  const {
-    state: { termsAccepted },
-    setField,
-  } = useAppState();
+  const { termsAccepted } = useAppState();
+  const { setField } = useAppDispatch();
 
   const handleChange = React.useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => setField("termsAccepted", event.currentTarget.checked),

@@ -1,15 +1,12 @@
-import * as React from "react";
-import { useAppState } from "./useAppState";
-import { setPasswordConfirm } from "./appActions";
+import React from "react";
+import { useAppState, useAppDispatch } from "./useAppState";
 
 export const PasswordConfirm: React.FC = () => {
   const {
-    setField,
-    state: {
-      passwordConfirm,
-      errors: { passwordConfirm: error },
-    },
+    passwordConfirm,
+    errors: { passwordConfirm: error },
   } = useAppState();
+  const { setField } = useAppDispatch();
 
   const handleChange = React.useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => setField("passwordConfirm", event.currentTarget.value),

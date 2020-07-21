@@ -1,19 +1,22 @@
 import { hot } from "react-hot-loader/root";
 import React from "react";
 import { useCallback } from "react";
-import { useAppState } from "./useAppState";
+import { useAppState, useAppDispatch } from "./useAppState";
 import { Email } from "./Email";
 import { Password } from "./Password";
 import { PasswordConfirm } from "./PasswordConfirm";
 import { Terms } from "./Terms";
 import { Label } from "./Label";
 
+export function Log({ name }: { name: string }): JSX.Element {
+  console.log(`rendering "${name}"`);
+  return null;
+}
+
+
 export const App: React.FC = () => {
-  const {
-    state: { street, houseNumber, city, zipCode, termsAccepted, step, errors },
-    setField,
-    validateForm,
-  } = useAppState();
+  const { street, houseNumber, city, zipCode, termsAccepted, step, errors } = useAppState();
+  const { setField, validateForm } = useAppDispatch();
 
   const handleSubmit = useCallback(
     (event: React.FormEvent) => {
@@ -25,8 +28,10 @@ export const App: React.FC = () => {
 
   return (
     <form noValidate onSubmit={handleSubmit}>
+      <Log name="form" />
       {step === 1 && (
         <>
+          <Log name="step 1" />
           <Email />
           <Password />
           <PasswordConfirm />
@@ -39,13 +44,14 @@ export const App: React.FC = () => {
 
       {step === 2 && (
         <>
-          <Label
+          Step 2
+          {<Label
             text="Street"
             placeholder="Street"
             value={street}
             onChange={(e) => setField("street", e.currentTarget.value)}
             error={errors["email"]}
-          />
+          />}
           {/* <Label
             text="House number"
             placeholder="House number"

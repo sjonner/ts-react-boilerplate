@@ -1,40 +1,73 @@
-import * as React from "react";
-import { useReducer, createContext, useContext, useMemo, memo } from "react";
+import React from "react";
+import { useReducer, createContext, useContext, useMemo } from "react";
 import { AppState, initialState, appReducer } from "./appReducer";
 import { Action, setField, validateForm } from "./appActions";
 
-type ContextType = {
-  state: AppState;
-  dispatch: React.Dispatch<Action>;
-};
+type StateContextType = AppState;
+type DispatchContextType = React.Dispatch<Action>;
 
-const AppContext = createContext<ContextType>(null);
+const StateContext = createContext<StateContextType>(null);
+const DispatchContext = createContext<DispatchContextType>(null);
 
-export const AppProvider: React.FC = memo(({ children }) => {
+export const AppStateConsumer = StateContext.Consumer;
+
+// Uses reducer hook, updates ALL components that read something from the state.
+// Even if that part wasn't updated
+export const AppStateProviderFC: React.FC = ({ children }) => {
   const [state, dispatch] = useReducer(appReducer, initialState);
-  const value = useMemo(() => ({ state, dispatch }), [state, dispatch]);
 
-  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
-});
+  return (
+    <StateContext.Provider value={state}>
+      <DispatchContext.Provider value={dispatch}>{children}</DispatchContext.Provider>
+    </StateContext.Provider>
+  );
+};
+AppStateProviderFC.displayName = "AppStateProvider";
+
+export class AppStateProvider extends React.Component {
+  state = initialState;
+
+  render() {
+    return (
+      <StateContext.Provider value={this.state}>
+        <DispatchContext.Provider value={this.dispatch}>{this.props.children}</DispatchContext.Provider>
+      </StateContext.Provider>
+    );
+  }
+
+  dispatch = (action: Action) => {
+    const newState = appReducer(this.state, action);
+    this.setState(newState);
+  };
+}
 
 export function useAppState() {
-  const context = useContext(AppContext);
+  const context = useContext(StateContext);
 
   if (!context) {
-    throw new Error("useAppState must be used within a AppProvider");
+    throw new Error("useAppState must be used within a AppStateProvider");
+  }
+
+  return context;
+}
+
+export function useAppDispatch() {
+  const dispatch = useContext(DispatchContext);
+
+  if (!dispatch) {
+    throw new Error("useAppState must be used within a DispatchProvider");
   }
 
   const api = useMemo(
     () => ({
-      state: context.state,
       setField<T extends keyof AppState>(field: T, value: AppState[T]) {
-        context.dispatch(setField(field, value));
+        dispatch(setField(field, value));
       },
       validateForm(step: number) {
-        context.dispatch(validateForm(step));
+        dispatch(validateForm(step));
       },
     }),
-    [context.state]
+    [dispatch]
   );
 
   return api;
